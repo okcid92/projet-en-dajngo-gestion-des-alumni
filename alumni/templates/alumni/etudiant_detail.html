@@ -1,0 +1,139 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}
+    {{ etudiant.nom }} {{ etudiant.prenom }}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header header-with-actions">
+            <h2>{{ etudiant.nom }} {{ etudiant.prenom }}</h2>
+            <div class="actions">
+                <a href="{% url 'alumni:etudiant-update' etudiant.ine %}" class="btn btn-primary btn-sm">
+                    Modifier
+                </a>
+                <a href="{% url 'alumni:etudiant-delete' etudiant.ine %}" class="btn btn-danger btn-sm">
+                    Supprimer
+                </a>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="detail-row">
+                <div class="detail-column">
+                    {% if etudiant.photo %}
+                        <img src="{{ etudiant.photo.url }}" alt="{{ etudiant.nom }} {{ etudiant.prenom }}" class="profile-img">
+                    {% else %}
+                        <div class="text-center">
+                            👤
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="detail-column">
+                    <h3>Informations personnelles</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th>INE</th>
+                            <td>{{ etudiant.ine }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ etudiant.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Téléphone</th>
+                            <td>{{ etudiant.telephone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Statut actuel</th>
+                            <td>{{ etudiant.get_statut_actuel_display }}</td>
+                        </tr>
+                    </table>
+
+                    {% if etudiant.statut_actuel == 'en_poste' or etudiant.statut_actuel == 'en_stage' %}
+                        <h3>Informations d'emploi</h3>
+                        {% with emploi=etudiant.emplois.all.0 %}
+                            {% if emploi %}
+                                <table class="data-table">
+                                    <tr>
+                                        <th>Entreprise</th>
+                                        <td>
+                                            <a href="{% url 'alumni:entreprise-detail' emploi.entreprise.pk %}">
+                                                {{ emploi.entreprise.nom }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Poste</th>
+                                        <td>{{ emploi.poste }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date de début</th>
+                                        <td>{{ emploi.date_debut|date:"d/m/Y" }}</td>
+                                    </tr>
+                                    {% if emploi.date_fin %}
+                                    <tr>
+                                        <th>Date de fin</th>
+                                        <td>{{ emploi.date_fin|date:"d/m/Y" }}</td>
+                                    </tr>
+                                    {% endif %}
+                                </table>
+                            {% else %}
+                                <p class="text-muted">Aucune information d'emploi disponible.</p>
+                            {% endif %}
+                        {% endwith %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Section Diplômes -->
+            <div class="section-block">
+                <div class="header-with-actions">
+                    <h3>Diplômes</h3>
+                    <a href="{% url 'alumni:diplome-create' %}?etudiant={{ etudiant.ine }}" class="btn btn-success btn-sm">
+                        Ajouter un diplôme
+                    </a>
+                </div>
+                {% if etudiant.diplomes.all %}
+                    <div class="table-container">
+                        <table class="data-table striped-table">
+                            <thead>
+                                <tr>
+                                    <th>Intitulé</th>
+                                    <th>Spécialisation</th>
+                                    <th>Université</th>
+                                    <th>Année</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for diplome in etudiant.diplomes.all %}
+                                    <tr>
+                                        <td>{{ diplome.intitule }}</td>
+                                        <td>{{ diplome.specialisation }}</td>
+                                        <td>{{ diplome.universite }}</td>
+                                        <td>{{ diplome.annee_obtention }}</td>
+                                        <td>
+                                            <a href="{% url 'alumni:diplome-update' diplome.id %}" class="btn btn-primary btn-sm">
+                                                Modifier
+                                            </a>
+                                            <a href="{% url 'alumni:diplome-delete' diplome.id %}" class="btn btn-danger btn-sm">
+                                                Supprimer
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Aucun diplôme enregistré.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %} 

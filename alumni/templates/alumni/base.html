@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gestion des Étudiants Sortants de l'IBAM{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #EA663B;
+            --secondary: #F0906E;
+            --info: #42B5DA;
+            --accent: #F30C05;
+            --dark: #000000;
+            --light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .navbar {
+            background-color: var(--info);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: white !important;
+        }
+
+        .navbar-brand img {
+            height: 35px;
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        .container {
+            padding: 2rem 1rem;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #d24516;
+            border-color: #d24516;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        .btn-info {
+            background-color: var(--info);
+            border-color: var(--info);
+        }
+
+        .text-primary { color: var(--primary) !important; }
+        .text-secondary { color: var(--secondary) !important; }
+        .text-info { color: var(--info) !important; }
+        .text-accent { color: var(--accent) !important; }
+
+        .bg-primary { background-color: var(--primary) !important; }
+        .bg-secondary { background-color: var(--secondary) !important; }
+        .bg-info { background-color: var(--info) !important; }
+        .bg-accent { background-color: var(--accent) !important; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'alumni:dashboard' %}">
+                <img src="{% static 'alumni/images/logo-ibam.png' %}" alt="IBAM Logo">
+                Gestion des Étudiants Sortants de l'IBAM
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'alumni:dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-1"></i> Tableau de bord
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'alumni:etudiant-list' %}">
+                            <i class="fas fa-users me-1"></i> Étudiants
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'alumni:promotion-list' %}">
+                            <i class="fas fa-layer-group me-1"></i> Promotions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'alumni:entreprise-list' %}">
+                            <i class="fas fa-building me-1"></i> Entreprises
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'alumni:diplome-list' %}">
+                            <i class="fas fa-graduation-cap me-1"></i> Diplômes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{% url 'alumni:logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link border-0 bg-transparent">
+                                <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

@@ -1,0 +1,253 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Statistiques de l'IBAM</h1>
+
+    <div class="chart-row">
+        <!-- Distribution des statuts -->
+        <div class="chart-column">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Distribution des statuts</h5>
+                </div>
+                <div class="card-content">
+                    <canvas id="statutsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Distribution par promotion -->
+        <div class="chart-column">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Distribution par promotion</h5>
+                </div>
+                <div class="card-content">
+                    <canvas id="promotionsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top 5 des spécialisations -->
+        <div class="chart-column">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Top 5 des spécialisations</h5>
+                </div>
+                <div class="card-content">
+                    <canvas id="specialisationsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top 5 des entreprises -->
+        <div class="chart-column">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Top 5 des entreprises</h5>
+                </div>
+                <div class="card-content">
+                    <canvas id="entreprisesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Taux d'insertion -->
+        <div class="chart-column">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Taux d'insertion</h5>
+                </div>
+                <div class="card-content">
+                    <canvas id="insertionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Distribution des types de contrats -->
+        <div class="chart-column">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Distribution des types de contrats</h5>
+                </div>
+                <div class="card-content">
+                    <canvas id="contratsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Évolution des diplômes -->
+        <div class="chart-column">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Évolution des diplômes</h5>
+                </div>
+                <div class="card-content">
+                    <canvas id="evolutionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secteurs d'activité -->
+        <div class="chart-column">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Secteurs d'activité</h5>
+                </div>
+                <div class="card-content">
+                    <canvas id="secteursChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Distribution des statuts
+    new Chart(document.getElementById('statutsChart'), {
+        type: 'pie',
+        data: {
+            labels: {{ statuts_labels|default:'[]'|safe }},
+            datasets: [{
+                data: {{ statuts_data|default:'[]'|safe }},
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+            }]
+        }
+    });
+
+    // Distribution par promotion
+    new Chart(document.getElementById('promotionsChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ promotions_labels|default:'[]'|safe }},
+            datasets: [{
+                label: "Nombre d'étudiants",
+                data: {{ promotions_data|default:'[]'|safe }},
+                backgroundColor: '#36A2EB'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Top 5 des spécialisations
+    new Chart(document.getElementById('specialisationsChart'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ specialisations_labels|default:'[]'|safe }},
+            datasets: [{
+                data: {{ specialisations_data|default:'[]'|safe }},
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+            }]
+        }
+    });
+
+    // Top 5 des entreprises
+    new Chart(document.getElementById('entreprisesChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ entreprises_labels|default:'[]'|safe }},
+            datasets: [{
+                label: "Nombre d'emplois",
+                data: {{ entreprises_data|default:'[]'|safe }},
+                backgroundColor: '#FFCE56'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Taux d'insertion
+    new Chart(document.getElementById('insertionChart'), {
+        type: 'line',
+        data: {
+            labels: {{ insertion_labels|default:'[]'|safe }},
+            datasets: [{
+                label: "Taux d'insertion (%)",
+                data: {{ insertion_data|default:'[]'|safe }},
+                borderColor: '#4BC0C0',
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+
+    // Distribution des types de contrats
+    new Chart(document.getElementById('contratsChart'), {
+        type: 'pie',
+        data: {
+            labels: {{ contrats_labels|default:'[]'|safe }},
+            datasets: [{
+                data: {{ contrats_data|default:'[]'|safe }},
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+            }]
+        }
+    });
+
+    // Évolution des diplômes
+    new Chart(document.getElementById('evolutionChart'), {
+        type: 'line',
+        data: {
+            labels: {{ evolution_labels|default:'[]'|safe }},
+            datasets: [{
+                label: "Nombre de diplômes",
+                data: {{ evolution_data|default:'[]'|safe }},
+                borderColor: '#9966FF',
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Secteurs d'activité
+    new Chart(document.getElementById('secteursChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ secteurs_labels|default:'[]'|safe }},
+            datasets: [{
+                label: "Nombre d'entreprises",
+                data: {{ secteurs_data|default:'[]'|safe }},
+                backgroundColor: ['#FF6384']
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %} 

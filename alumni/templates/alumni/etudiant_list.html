@@ -1,0 +1,49 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}Liste des Étudiants{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header-with-actions">
+        <h1>Liste des Étudiants</h1>
+        <a href="{% url 'alumni:etudiant-create' %}" class="btn btn-primary">➕ Ajouter un étudiant</a>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table striped-table">
+            <thead>
+                <tr>
+                    <th>INE</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Promotion</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for etudiant in etudiants %}
+                <tr>
+                    <td>{{ etudiant.ine }}</td>
+                    <td>{{ etudiant.nom }}</td>
+                    <td>{{ etudiant.prenom }}</td>
+                    <td>{{ etudiant.email }}</td>
+                    <td>{{ etudiant.promotion }}</td>
+                    <td>{{ etudiant.get_statut_actuel_display }}</td>
+                    <td>
+                        <a href="{% url 'alumni:etudiant-detail' etudiant.ine %}" class="btn btn-info btn-small">Détails</a>
+                        <a href="{% url 'alumni:etudiant-update' etudiant.ine %}" class="btn btn-warning btn-small">Modifier</a>
+                        <a href="{% url 'alumni:etudiant-delete' etudiant.ine %}" class="btn btn-danger btn-small">Supprimer</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">Aucun étudiant trouvé</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

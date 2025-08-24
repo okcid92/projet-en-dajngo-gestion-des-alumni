@@ -1,0 +1,47 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}Liste des Promotions{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header-with-actions">
+        <h1>Liste des Promotions</h1>
+        <a href="{% url 'alumni:promotion-create' %}" class="btn btn-primary btn-sm">
+            Nouvelle Promotion
+        </a>
+    </div>
+
+    <div class="card-grid">
+        {% for promotion in promotions %}
+        <div class="card">
+            <div class="card-content">
+                <h5 class="card-title">{{ promotion.nom }}</h5>
+                <p class="card-text">
+                    <strong>Période :</strong> {{ promotion.annee_debut }} - {{ promotion.annee_fin }}<br>
+                    <strong>Spécialisation :</strong> {{ promotion.specialisation }}
+                </p>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group">
+                    <a href="{% url 'alumni:promotion-detail' promotion.pk %}" class="btn btn-info btn-sm">
+                        Détails
+                    </a>
+                    <a href="{% url 'alumni:promotion-update' promotion.pk %}" class="btn btn-primary btn-sm">
+                        Modifier
+                    </a>
+                    <a href="{% url 'alumni:promotion-delete' promotion.pk %}" class="btn btn-danger btn-sm">
+                        Supprimer
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="full-width-message">
+            <div class="alert info-alert">
+                Aucune promotion n'a été créée pour le moment.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

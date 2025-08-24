@@ -1,0 +1,87 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}Liste des Diplômes{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header-with-actions">
+        <h1>Liste des Diplômes</h1>
+        <a href="{% url 'alumni:diplome-create' %}" class="btn btn-primary btn-sm">
+            Nouveau Diplôme
+        </a>
+    </div>
+
+    <!-- Filtres -->
+    <div class="card">
+        <div class="card-content">
+            <form method="get" class="form-grid">
+                <div class="form-group">
+                    <label for="specialisation" class="form-label">Spécialisation</label>
+                    <input type="text" class="form-control" id="specialisation" name="specialisation" value="{{ request.GET.specialisation }}">
+                </div>
+                <div class="form-group">
+                    <label for="universite" class="form-label">Université</label>
+                    <input type="text" class="form-control" id="universite" name="universite" value="{{ request.GET.universite }}">
+                </div>
+                <div class="form-group">
+                    <label for="annee" class="form-label">Année</label>
+                    <input type="number" class="form-control" id="annee" name="annee" value="{{ request.GET.annee }}">
+                </div>
+                <div class="form-group form-actions-filter">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        Filtrer
+                    </button>
+                    <a href="{% url 'alumni:diplome-list' %}" class="btn btn-secondary btn-sm">
+                        Réinitialiser
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table striped-table">
+            <thead>
+                <tr>
+                    <th>Intitulé</th>
+                    <th>Spécialisation</th>
+                    <th>Université</th>
+                    <th>Année</th>
+                    <th>Étudiant</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for diplome in diplomes %}
+                <tr>
+                    <td>{{ diplome.intitule }}</td>
+                    <td>{{ diplome.specialisation }}</td>
+                    <td>{{ diplome.universite }}</td>
+                    <td>{{ diplome.annee_obtention }}</td>
+                    <td>
+                        <a href="{% url 'alumni:etudiant-detail' diplome.etudiant.ine %}">
+                            {{ diplome.etudiant.nom }} {{ diplome.etudiant.prenom }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'alumni:diplome-detail' diplome.pk %}" class="btn btn-info btn-sm">
+                            Détails
+                        </a>
+                        <a href="{% url 'alumni:diplome-update' diplome.pk %}" class="btn btn-warning btn-sm">
+                            Modifier
+                        </a>
+                        <a href="{% url 'alumni:diplome-delete' diplome.pk %}" class="btn btn-danger btn-sm">
+                            Supprimer
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">Aucun diplôme trouvé</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

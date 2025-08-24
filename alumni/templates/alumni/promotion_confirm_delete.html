@@ -1,0 +1,30 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}Supprimer la Promotion{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>Supprimer la Promotion</h2>
+        </div>
+        <div class="card-content">
+            <p class="alert error-alert">
+                ⚠️
+                Êtes-vous sûr de vouloir supprimer la promotion "{{ object.nom }}" ?
+            </p>
+            <p>Cette action est irréversible et supprimera également tous les étudiants associés à cette promotion.</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">
+                    Confirmer la suppression
+                </button>
+                <a href="{% url 'alumni:promotion-list' %}" class="btn btn-secondary btn-sm">
+                    Annuler
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

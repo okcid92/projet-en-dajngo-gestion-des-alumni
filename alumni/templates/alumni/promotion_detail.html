@@ -1,0 +1,59 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}Détails de la Promotion{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header header-with-actions">
+            <h2>{{ promotion.nom }}</h2>
+            <div class="actions">
+                <a href="{% url 'alumni:promotion-update' promotion.pk %}" class="btn btn-primary btn-sm">
+                    Modifier
+                </a>
+                <a href="{% url 'alumni:promotion-delete' promotion.pk %}" class="btn btn-danger btn-sm">
+                    Supprimer
+                </a>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="detail-row">
+                <div class="detail-column">
+                    <h4>Informations générales</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Période</th>
+                            <td>{{ promotion.annee_debut }} - {{ promotion.annee_fin }}</td>
+                        </tr>
+                        <tr>
+                            <th>Spécialisation</th>
+                            <td>{{ promotion.specialisation }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="detail-column">
+                    <h4>Étudiants de la promotion</h4>
+                    <ul class="basic-list">
+                        {% for etudiant in promotion.etudiant_set.all %}
+                        <li>
+                            <a href="{% url 'alumni:etudiant-detail' etudiant.ine %}">
+                                {{ etudiant.nom }} {{ etudiant.prenom }}
+                            </a>
+                        </li>
+                        {% empty %}
+                        <div class="alert info-alert">
+                            Aucun étudiant n'est associé à cette promotion.
+                        </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <a href="{% url 'alumni:promotion-list' %}" class="btn btn-secondary">
+                ⬅️ Retour à la liste
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

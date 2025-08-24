@@ -1,0 +1,23 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}Supprimer {{ object.nom }} {{ object.prenom }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Confirmer la suppression</h2>
+    </div>
+    <div class="card-body">
+        <p class="alert alert-danger">
+            Êtes-vous sûr de vouloir supprimer l'étudiant "{{ object.nom }} {{ object.prenom }}" ?
+            Cette action est irréversible.
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+            <a href="{% url 'alumni:etudiant-detail' object.ine %}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</div>
+{% endblock %} 

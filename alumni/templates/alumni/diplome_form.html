@@ -1,0 +1,103 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}
+    {% if form.instance.pk %}
+        Modifier le Diplôme
+    {% else %}
+        Nouveau Diplôme
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                {% if form.instance.pk %}
+                    Modifier le Diplôme
+                {% else %}
+                    Nouveau Diplôme
+                {% endif %}
+            </h2>
+        </div>
+        <div class="card-content">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.intitule.id_for_label }}" class="form-label">Intitulé</label>
+                        <input type="text" name="intitule" id="{{ form.intitule.id_for_label }}" 
+                               class="form-control {% if form.intitule.errors %}is-invalid{% endif %}"
+                               value="{{ form.intitule.value|default:'' }}" required>
+                        {% if form.intitule.errors %}
+                        <div class="error-message">
+                            {{ form.intitule.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.specialisation.id_for_label }}" class="form-label">Spécialisation</label>
+                        <input type="text" name="specialisation" id="{{ form.specialisation.id_for_label }}" 
+                               class="form-control {% if form.specialisation.errors %}is-invalid{% endif %}"
+                               value="{{ form.specialisation.value|default:'' }}" required>
+                        {% if form.specialisation.errors %}
+                        <div class="error-message">
+                            {{ form.specialisation.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.universite.id_for_label }}" class="form-label">Université</label>
+                        <input type="text" name="universite" id="{{ form.universite.id_for_label }}" 
+                               class="form-control {% if form.universite.errors %}is-invalid{% endif %}"
+                               value="{{ form.universite.value|default:'' }}" required>
+                        {% if form.universite.errors %}
+                        <div class="error-message">
+                            {{ form.universite.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.annee_obtention.id_for_label }}" class="form-label">Année d'obtention</label>
+                        <input type="number" name="annee_obtention" id="{{ form.annee_obtention.id_for_label }}" 
+                               class="form-control {% if form.annee_obtention.errors %}is-invalid{% endif %}"
+                               value="{{ form.annee_obtention.value|default:'' }}" required>
+                        {% if form.annee_obtention.errors %}
+                        <div class="error-message">
+                            {{ form.annee_obtention.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.etudiant.id_for_label }}" class="form-label">Étudiant</label>
+                    <select name="etudiant" id="{{ form.etudiant.id_for_label }}" 
+                            class="form-control {% if form.etudiant.errors %}is-invalid{% endif %}" required>
+                        <option value="">---------</option>
+                        {% for etudiant in form.fields.etudiant.queryset %}
+                        <option value="{{ etudiant.ine }}" {% if form.etudiant.value|stringformat:"s" == etudiant.ine|stringformat:"s" %}selected{% endif %}>
+                            {{ etudiant.nom }} {{ etudiant.prenom }} ({{ etudiant.ine }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% if form.etudiant.errors %}
+                    <div class="error-message">
+                        {{ form.etudiant.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        💾 Enregistrer
+                    </button>
+                    <a href="{% url 'alumni:diplome-list' %}" class="btn btn-secondary">
+                        ❌ Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

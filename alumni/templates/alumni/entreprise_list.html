@@ -1,0 +1,51 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}Liste des Entreprises{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header-with-actions">
+        <h2>Liste des Entreprises</h2>
+        <a href="{% url 'alumni:entreprise-create' %}" class="btn btn-primary btn-sm">
+            Nouvelle Entreprise
+        </a>
+    </div>
+
+    {% if entreprises %}
+    <div class="card-grid">
+        {% for entreprise in entreprises %}
+        <div class="card">
+            <div class="card-content">
+                <h5 class="card-title">{{ entreprise.nom }}</h5>
+                <p class="card-text">
+                    <strong>Secteur :</strong> {{ entreprise.secteur }}<br>
+                    <strong>Email :</strong> {{ entreprise.email_contact }}<br>
+                    {% if entreprise.site_web %}
+                    <strong>Site web :</strong> 
+                    <a href="{{ entreprise.site_web }}" target="_blank">{{ entreprise.site_web }}</a>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group">
+                    <a href="{% url 'alumni:entreprise-detail' entreprise.pk %}" class="btn btn-info btn-sm">
+                        Voir
+                    </a>
+                    <a href="{% url 'alumni:entreprise-update' entreprise.pk %}" class="btn btn-primary btn-sm">
+                        Modifier
+                    </a>
+                    <a href="{% url 'alumni:entreprise-delete' entreprise.pk %}" class="btn btn-danger btn-sm">
+                        Supprimer
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert info-alert">
+        Aucune entreprise n'a été créée pour le moment.
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

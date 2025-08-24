@@ -1,0 +1,184 @@
+{% extends 'alumni/base.html' %}
+{% load static %}
+
+{% block title %}Tableau de bord - Gestion des Étudiants Sortants{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 mb-4">Tableau de bord</h1>
+        </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 bg-primary text-white shadow-sm" data-count="{{ total_etudiants|default:"0" }}">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title text-center"><i class="fas fa-users me-2"></i>Étudiants</h5>
+                    <h2 class="display-4 text-center mb-0"></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 bg-secondary text-white shadow-sm" data-count="{{ total_entreprises|default:"0" }}">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title text-center"><i class="fas fa-building me-2"></i>Entreprises</h5>
+                    <h2 class="display-4 text-center mb-0"></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 bg-info text-white shadow-sm" data-count="{{ total_diplomes|default:"0" }}">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title text-center"><i class="fas fa-graduation-cap me-2"></i>Diplômes</h5>
+                    <h2 class="display-4 text-center mb-0"></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 bg-accent text-white shadow-sm" data-count="{{ total_emplois|default:"0" }}">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title text-center"><i class="fas fa-briefcase me-2"></i>Emplois</h5>
+                    <h2 class="display-4 text-center mb-0"></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bolt text-primary me-2"></i>Actions rapides
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'alumni:etudiant-create' %}" class="btn btn-primary w-100">
+                                <i class="fas fa-user-plus me-2"></i>Nouvel étudiant
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'alumni:promotion-create' %}" class="btn btn-secondary w-100">
+                                <i class="fas fa-plus-circle me-2"></i>Nouvelle promotion
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'alumni:entreprise-create' %}" class="btn btn-info w-100">
+                                <i class="fas fa-building me-2"></i>Nouvelle entreprise
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'alumni:diplome-create' %}" class="btn btn-accent w-100">
+                                <i class="fas fa-graduation-cap me-2"></i>Nouveau diplôme
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Promotions récentes -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-layer-group text-primary me-2"></i>Promotions récentes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for promotion in dernieres_promotions %}
+                        <a href="{% url 'alumni:promotion-detail' promotion.id %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ promotion.nom }}</h6>
+                                <small class="text-muted">{{ promotion.annee }}</small>
+                            </div>
+                            <p class="mb-1">{{ promotion.description|truncatechars:100 }}</p>
+                        </a>
+                        {% empty %}
+                        <p class="text-muted mb-0">Aucune promotion récente</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activités récentes (Derniers étudiants ajoutés) -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-history text-primary me-2"></i>Derniers étudiants ajoutés
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for etudiant in derniers_etudiants %}
+                        {% if etudiant.pk %}
+                        <a href="{% url 'alumni:etudiant-detail' etudiant.pk %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ etudiant.prenom }} {{ etudiant.nom }}</h6>
+                                <small class="text-muted">{{ etudiant.date_inscription|date:"d/m/Y" }}</small>
+                            </div>
+                            <p class="mb-1">INE: {{ etudiant.ine }}</p>
+                        </a>
+                        {% else %}
+                        <div class="list-group-item text-muted">Données étudiant invalides ou manquantes.</div>
+                        {% endif %}
+                        {% empty %}
+                        <p class="text-muted mb-0">Aucun étudiant récent</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Custom styles for card hover and list items */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;
+    }
+
+    .list-group-item {
+        transition: background-color 0.3s ease;
+    }
+
+    .list-group-item:hover {
+        background-color: var(--light);
+    }
+    
+    /* Styles for card body content alignment */
+    .card-body h5, .card-body h2 {
+        margin-bottom: 0.5rem;
+    }
+    .card-body h2 {
+        font-size: 2.5rem;
+    }
+
+    /* Ensure icons within buttons have margin */
+    .btn .fas {
+        margin-right: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'alumni/js/dashboard_animations.js' %}"></script>
+{% endblock %}

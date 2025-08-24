@@ -1,0 +1,40 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="login-container">
+        <div class="card">
+            <div class="card-header">
+                <h3>Connexion</h3>
+            </div>
+            <div class="card-content">
+                {% if form.errors %}
+                <div class="alert error-alert">
+                    ℹ️
+                    Nom d'utilisateur ou mot de passe incorrect.
+                </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'alumni:login' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_username" class="form-label">Nom d'utilisateur</label>
+                        <input type="text" name="username" id="id_username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_password" class="form-label">Mot de passe</label>
+                        <input type="password" name="password" id="id_password" class="form-control" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            ➡️ Se connecter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

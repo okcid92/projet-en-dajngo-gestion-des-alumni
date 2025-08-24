@@ -1,0 +1,63 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}{{ object.intitule }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header header-with-actions">
+            <h2>{{ object.intitule }}</h2>
+            <div class="actions">
+                <a href="{% url 'alumni:diplome-update' object.pk %}" class="btn btn-primary btn-sm">
+                    Modifier
+                </a>
+                <a href="{% url 'alumni:diplome-delete' object.pk %}" class="btn btn-danger btn-sm">
+                    Supprimer
+                </a>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="detail-row">
+                <div class="detail-column">
+                    <h4>Informations du Diplôme</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Spécialisation</th>
+                            <td>{{ object.specialisation }}</td>
+                        </tr>
+                        <tr>
+                            <th>Université</th>
+                            <td>{{ object.universite }}</td>
+                        </tr>
+                        <tr>
+                            <th>Année d'obtention</th>
+                            <td>{{ object.annee_obtention }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="detail-column">
+                    <h4>Étudiant</h4>
+                    <div class="card">
+                        <div class="card-content">
+                            <h5 class="card-title">
+                                <a href="{% url 'alumni:etudiant-detail' object.etudiant.pk %}">
+                                    {{ object.etudiant.nom }} {{ object.etudiant.prenom }}
+                                </a>
+                            </h5>
+                            <p class="card-text">
+                                Promotion : {{ object.etudiant.promotion }}<br>
+                                Email : {{ object.etudiant.email }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <a href="{% url 'alumni:diplome-list' %}" class="btn btn-secondary">
+                ⬅️ Retour à la liste
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

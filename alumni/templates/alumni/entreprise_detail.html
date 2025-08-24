@@ -1,0 +1,94 @@
+{% extends 'alumni/base.html' %}
+
+{% block title %}{{ entreprise.nom }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header header-with-actions">
+            <h2>{{ entreprise.nom }}</h2>
+            <div class="actions">
+                <a href="{% url 'alumni:entreprise-update' entreprise.pk %}" class="btn btn-primary">
+                    ✏️ Modifier
+                </a>
+                <a href="{% url 'alumni:entreprise-delete' entreprise.pk %}" class="btn btn-danger">
+                    🗑️ Supprimer
+                </a>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="detail-row">
+                <div class="detail-column">
+                    <h4>Informations Générales</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Secteur</th>
+                            <td>{{ entreprise.secteur }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email de contact</th>
+                            <td>{{ entreprise.email_contact }}</td>
+                        </tr>
+                        <tr>
+                            <th>Site web</th>
+                            <td>
+                                {% if entreprise.site_web %}
+                                <a href="{{ entreprise.site_web }}" target="_blank">{{ entreprise.site_web }}</a>
+                                {% else %}
+                                Non renseigné
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Adresse</th>
+                            <td>{{ entreprise.adresse|default:"Non renseignée" }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="detail-column">
+                    <h4>Employés actuels</h4>
+                    {% with emplois_actuels=entreprise.emploi_set.all %}
+                    {% if emplois_actuels %}
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Poste</th>
+                                    <th>Étudiant</th>
+                                    <th>Type de contrat</th>
+                                    <th>Date début</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for emploi in emplois_actuels %}
+                                <tr>
+                                    <td>{{ emploi.poste }}</td>
+                                    <td>
+                                        <a href="{% url 'alumni:etudiant-detail' emploi.etudiant.pk %}">
+                                            {{ emploi.etudiant.nom }} {{ emploi.etudiant.prenom }}
+                                        </a>
+                                    </td>
+                                    <td>{{ emploi.get_type_contrat_display }}</td>
+                                    <td>{{ emploi.date_debut }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert info-alert">
+                        Aucun employé actuel dans cette entreprise.
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <a href="{% url 'alumni:entreprise-list' %}" class="btn btn-secondary btn-sm">
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 
