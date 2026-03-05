@@ -1,139 +1,189 @@
 {% extends 'alumni/base.html' %}
 
-{% block title %}
-    {{ etudiant.nom }} {{ etudiant.prenom }}
-{% endblock %}
+{% block title %}{{ etudiant.prenom }} {{ etudiant.nom }} - IBAM Alumni{% endblock %}
+{% block header_title %}Profil de l'étudiant{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="card">
-        <div class="card-header header-with-actions">
-            <h2>{{ etudiant.nom }} {{ etudiant.prenom }}</h2>
-            <div class="actions">
-                <a href="{% url 'alumni:etudiant-update' etudiant.ine %}" class="btn btn-primary btn-sm">
-                    Modifier
-                </a>
-                <a href="{% url 'alumni:etudiant-delete' etudiant.ine %}" class="btn btn-danger btn-sm">
-                    Supprimer
-                </a>
+<div class="max-w-6xl mx-auto space-y-8">
+    <!-- Header/Cover Area -->
+    <div class="relative">
+        <div class="h-32 sm:h-48 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl shadow-sm"></div>
+        <div class="absolute -bottom-12 left-8 flex items-end gap-6">
+            <div class="p-1 bg-white dark:bg-dark-900 rounded-2xl shadow-lg">
+                {% if etudiant.photo_profil %}
+                    <img src="{{ etudiant.photo_profil.url }}" alt="{{ etudiant.nom }}" class="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-xl">
+                {% else %}
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 dark:bg-dark-800 rounded-xl flex items-center justify-center text-gray-400">
+                        <i class="fas fa-user text-4xl sm:text-5xl"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mb-2 hidden sm:block">
+                <h1 class="text-3xl font-bold text-white drop-shadow-md">{{ etudiant.prenom }} {{ etudiant.nom }}</h1>
+                <p class="text-white/80 font-medium">INE: {{ etudiant.ine }}</p>
             </div>
         </div>
-        <div class="card-content">
-            <div class="detail-row">
-                <div class="detail-column">
-                    {% if etudiant.photo %}
-                        <img src="{{ etudiant.photo.url }}" alt="{{ etudiant.nom }} {{ etudiant.prenom }}" class="profile-img">
-                    {% else %}
-                        <div class="text-center">
-                            👤
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="detail-column">
-                    <h3>Informations personnelles</h3>
-                    <table class="data-table">
-                        <tr>
-                            <th>INE</th>
-                            <td>{{ etudiant.ine }}</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>{{ etudiant.email }}</td>
-                        </tr>
-                        <tr>
-                            <th>Téléphone</th>
-                            <td>{{ etudiant.telephone }}</td>
-                        </tr>
-                        <tr>
-                            <th>Statut actuel</th>
-                            <td>{{ etudiant.get_statut_actuel_display }}</td>
-                        </tr>
-                    </table>
+        <div class="absolute -bottom-10 right-8 flex gap-3">
+            <a href="{% url 'alumni:etudiant-update' etudiant.ine %}" class="btn-primary">
+                <i class="fas fa-edit mr-2"></i>Modifier
+            </a>
+            <a href="{% url 'alumni:etudiant-delete' etudiant.ine %}" class="btn-outline bg-white dark:bg-dark-900 text-red-600 border-red-100 hover:bg-red-50 dark:hover:bg-red-900/20">
+                <i class="fas fa-trash"></i>
+            </a>
+        </div>
+    </div>
 
-                    {% if etudiant.statut_actuel == 'en_poste' or etudiant.statut_actuel == 'en_stage' %}
-                        <h3>Informations d'emploi</h3>
-                        {% with emploi=etudiant.emplois.all.0 %}
-                            {% if emploi %}
-                                <table class="data-table">
-                                    <tr>
-                                        <th>Entreprise</th>
-                                        <td>
-                                            <a href="{% url 'alumni:entreprise-detail' emploi.entreprise.pk %}">
-                                                {{ emploi.entreprise.nom }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Poste</th>
-                                        <td>{{ emploi.poste }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Date de début</th>
-                                        <td>{{ emploi.date_debut|date:"d/m/Y" }}</td>
-                                    </tr>
-                                    {% if emploi.date_fin %}
-                                    <tr>
-                                        <th>Date de fin</th>
-                                        <td>{{ emploi.date_fin|date:"d/m/Y" }}</td>
-                                    </tr>
-                                    {% endif %}
-                                </table>
-                            {% else %}
-                                <p class="text-muted">Aucune information d'emploi disponible.</p>
-                            {% endif %}
-                        {% endwith %}
-                    {% endif %}
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-12">
+        <!-- Sidebar Info -->
+        <div class="space-y-6">
+            <!-- Basic Status Card -->
+            <div class="card p-6">
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Statut Actuel</h3>
+                <div class="flex items-center gap-3">
+                    <span class="badge py-1.5 px-4 text-sm {% if etudiant.get_statut_actuel_display == 'Actif' %}bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400{% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400{% endif %}">
+                        <i class="fas {% if etudiant.get_statut_actuel_display == 'Actif' %}fa-check-circle{% else %}fa-clock{% endif %} mr-2"></i>
+                        {{ etudiant.get_statut_actuel_display }}
+                    </span>
+                </div>
+                <div class="mt-6 space-y-4">
+                    <div class="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                        <i class="fas fa-envelope w-5 text-gray-400"></i>
+                        <a href="mailto:{{ etudiant.email }}" class="text-sm hover:text-primary transition-colors">{{ etudiant.email }}</a>
+                    </div>
+                    <div class="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                        <i class="fas fa-phone w-5 text-gray-400"></i>
+                        <span class="text-sm">{{ etudiant.telephone|default:"Non renseigné" }}</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                        <i class="fas fa-map-marker-alt w-5 text-gray-400"></i>
+                        <span class="text-sm">{{ etudiant.adresse|default:"Non renseigné" }}</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Section Diplômes -->
-            <div class="section-block">
-                <div class="header-with-actions">
-                    <h3>Diplômes</h3>
-                    <a href="{% url 'alumni:diplome-create' %}?etudiant={{ etudiant.ine }}" class="btn btn-success btn-sm">
-                        Ajouter un diplôme
+            <!-- Promotion Card -->
+            <div class="card p-6 bg-primary-50 dark:bg-primary-900/10 border-primary-100 dark:border-primary-800/30">
+                <h3 class="text-sm font-bold text-primary-700 dark:text-primary-400 uppercase tracking-wider mb-4">Parcours Académique</h3>
+                <div class="space-y-3">
+                    <div class="text-sm">
+                        <p class="text-gray-500">Promotion</p>
+                        <a href="{% url 'alumni:promotion-detail' etudiant.promotion.id %}" class="font-bold text-gray-900 dark:text-white hover:text-primary transition-colors">
+                            {{ etudiant.promotion }}
+                        </a>
+                    </div>
+                    <div class="text-sm">
+                        <p class="text-gray-500">Année de sortie</p>
+                        <p class="font-bold text-gray-900 dark:text-white">{{ etudiant.annee_sortie }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Info Columns -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Job Info Section (if applicable) -->
+            {% if etudiant.statut_actuel == 'en_poste' or etudiant.statut_actuel == 'en_stage' %}
+            <div class="card overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 dark:bg-dark-800 border-b border-gray-100 dark:border-dark-700 flex items-center justify-between">
+                    <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fas fa-briefcase text-secondary"></i>
+                        Situation Professionnelle Actuelle
+                    </h3>
+                </div>
+                <div class="p-6">
+                    {% with emploi=etudiant.emplois.all.0 %}
+                    {% if emploi %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase mb-1">Poste occupé</p>
+                            <p class="text-lg font-bold text-gray-900 dark:text-white">{{ emploi.poste }}</p>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 dark:bg-dark-700 text-gray-800 dark:text-gray-300 mt-2 capitalize">
+                                {{ emploi.get_type_contrat_display }}
+                            </span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase mb-1">Entreprise</p>
+                            <a href="{% url 'alumni:entreprise-detail' emploi.entreprise.id %}" class="text-lg font-bold text-secondary hover:text-secondary-600 transition-colors">
+                                {{ emploi.entreprise.nom }}
+                            </a>
+                            <p class="text-sm text-gray-500 mt-1">{{ emploi.entreprise.adresse }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase mb-1">Depuis le</p>
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ emploi.date_debut|date:"d F Y" }}</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-6">
+                        <p class="text-gray-500 italic">Détails de l'emploi non renseignés.</p>
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Diplomas List -->
+            <div class="card overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 dark:bg-dark-800 border-b border-gray-100 dark:border-dark-700 flex items-center justify-between">
+                    <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fas fa-graduation-cap text-info"></i>
+                        Diplômes et Certifications
+                    </h3>
+                    <a href="{% url 'alumni:diplome-create' %}" class="text-xs font-bold text-info hover:text-info-600 uppercase tracking-wider">
+                        <i class="fas fa-plus mr-1"></i> Ajouter
                     </a>
                 </div>
-                {% if etudiant.diplomes.all %}
-                    <div class="table-container">
-                        <table class="data-table striped-table">
-                            <thead>
+                <div class="p-0">
+                    {% if etudiant.diplome_set.all %}
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50/50 dark:bg-dark-800/50">
                                 <tr>
-                                    <th>Intitulé</th>
-                                    <th>Spécialisation</th>
-                                    <th>Université</th>
-                                    <th>Année</th>
-                                    <th>Actions</th>
+                                    <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Diplôme</th>
+                                    <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Établissement</th>
+                                    <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Année</th>
+                                    <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {% for diplome in etudiant.diplomes.all %}
-                                    <tr>
-                                        <td>{{ diplome.intitule }}</td>
-                                        <td>{{ diplome.specialisation }}</td>
-                                        <td>{{ diplome.universite }}</td>
-                                        <td>{{ diplome.annee_obtention }}</td>
-                                        <td>
-                                            <a href="{% url 'alumni:diplome-update' diplome.id %}" class="btn btn-primary btn-sm">
-                                                Modifier
+                            <tbody class="divide-y divide-gray-100 dark:divide-dark-800">
+                                {% for diplome in etudiant.diplome_set.all %}
+                                <tr class="hover:bg-gray-50 dark:hover:bg-dark-800/30 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-bold text-gray-900 dark:text-white">{{ diplome.intitule }}</div>
+                                        <div class="text-xs text-gray-500">{{ diplome.specialisation }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                                        {{ diplome.universite }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        {{ diplome.annee_obtention }}
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex justify-end gap-2">
+                                            <a href="{% url 'alumni:diplome-update' diplome.id %}" class="text-gray-400 hover:text-secondary transition-colors">
+                                                <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="{% url 'alumni:diplome-delete' diplome.id %}" class="btn btn-danger btn-sm">
-                                                Supprimer
+                                            <a href="{% url 'alumni:diplome-delete' diplome.id %}" class="text-gray-400 hover:text-red-500 transition-colors">
+                                                <i class="fas fa-trash"></i>
                                             </a>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                {% else %}
-                    <p class="text-muted">Aucun diplôme enregistré.</p>
-                {% endif %}
+                    {% else %}
+                    <div class="px-6 py-12 text-center text-gray-400">
+                        <i class="fas fa-certificate text-4xl mb-3 opacity-20"></i>
+                        <p class="text-sm italic">Aucun diplôme enregistré pour le moment.</p>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
-
-{% block extra_js %}
-{% endblock %} 

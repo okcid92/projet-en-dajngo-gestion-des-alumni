@@ -3,26 +3,31 @@
 {% block title %}Supprimer {{ object.nom }}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            <h2>Confirmer la suppression</h2>
+<div class="max-w-2xl mx-auto px-4 py-8">
+    <div class="card p-8 border-l-4 border-red-600">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+            <i class="fas fa-exclamation-triangle text-red-600"></i>
+            Confirmer la suppression
+        </h2>
+        
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p class="text-red-800 font-medium">
+                Vous êtes sur le point de supprimer l'entreprise <strong>{{ object.nom }}</strong>.
+            </p>
+            <p class="text-red-700 text-sm mt-2">
+                <i class="fas fa-info-circle mr-2"></i>Cette action est irréversible et supprimera également tous les emplois associés à cette entreprise.
+            </p>
         </div>
-        <div class="card-content">
-            <div class="alert alert-warning">
-                <h4>Attention !</h4>
-                <p>Vous êtes sur le point de supprimer l'entreprise "{{ object.nom }}". Cette action est irréversible et supprimera également tous les emplois associés à cette entreprise.</p>
-            </div>
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-sm">
-                    Confirmer la suppression
-                </button>
-                <a href="{% url 'alumni:entreprise-list' %}" class="btn btn-secondary btn-sm">
-                    Annuler
-                </a>
-            </form>
-        </div>
+
+        <form method="post" class="flex gap-4 justify-center">
+            {% csrf_token %}
+            <button type="submit" class="px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium flex items-center gap-2">
+                <i class="fas fa-trash mr-2"></i>Confirmer la suppression
+            </button>
+            <a href="{% url 'alumni:entreprise-list' %}" class="px-6 py-3 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition-colors font-medium flex items-center gap-2">
+                <i class="fas fa-times mr-2"></i>Annuler
+            </a>
+        </form>
     </div>
 </div>
 {% endblock %} 

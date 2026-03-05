@@ -1,59 +1,110 @@
 {% extends 'alumni/base.html' %}
 
-{% block title %}Détails de la Promotion{% endblock %}
+{% block title %}Détails Promotion - {{ promotion.nom }} - IBAM Alumni{% endblock %}
+{% block header_title %}Détails de la Promotion{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="card">
-        <div class="card-header header-with-actions">
-            <h2>{{ promotion.nom }}</h2>
-            <div class="actions">
-                <a href="{% url 'alumni:promotion-update' promotion.pk %}" class="btn btn-primary btn-sm">
-                    Modifier
-                </a>
-                <a href="{% url 'alumni:promotion-delete' promotion.pk %}" class="btn btn-danger btn-sm">
-                    Supprimer
-                </a>
-            </div>
+<div class="max-w-6xl mx-auto space-y-8">
+    <!-- Action Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <a href="{% url 'alumni:promotion-list' %}" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-primary transition-colors mb-2">
+                <i class="fas fa-arrow-left mr-2"></i>Retour aux promotions
+            </a>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ promotion.nom }}</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Période : {{ promotion.annee_debut }} - {{ promotion.annee_fin }}</p>
         </div>
-        <div class="card-content">
-            <div class="detail-row">
-                <div class="detail-column">
-                    <h4>Informations générales</h4>
-                    <table class="data-table">
-                        <tr>
-                            <th>Période</th>
-                            <td>{{ promotion.annee_debut }} - {{ promotion.annee_fin }}</td>
-                        </tr>
-                        <tr>
-                            <th>Spécialisation</th>
-                            <td>{{ promotion.specialisation }}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="detail-column">
-                    <h4>Étudiants de la promotion</h4>
-                    <ul class="basic-list">
-                        {% for etudiant in promotion.etudiant_set.all %}
-                        <li>
-                            <a href="{% url 'alumni:etudiant-detail' etudiant.ine %}">
-                                {{ etudiant.nom }} {{ etudiant.prenom }}
-                            </a>
-                        </li>
-                        {% empty %}
-                        <div class="alert info-alert">
-                            Aucun étudiant n'est associé à cette promotion.
-                        </div>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="form-actions">
-            <a href="{% url 'alumni:promotion-list' %}" class="btn btn-secondary">
-                ⬅️ Retour à la liste
+        <div class="flex gap-2">
+            <a href="{% url 'alumni:promotion-update' promotion.pk %}" class="btn-primary">
+                <i class="fas fa-edit mr-2"></i>Modifier
+            </a>
+            <a href="{% url 'alumni:promotion-delete' promotion.pk %}" class="btn-outline text-red-600 border-red-100 hover:bg-red-50 dark:hover:bg-red-900/20">
+                <i class="fas fa-trash"></i>
             </a>
         </div>
     </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Stats/Info Sidebar -->
+        <div class="space-y-6">
+            <div class="card p-6">
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Aperçu</h3>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Effectif total</p>
+                        <p class="text-2xl font-bold text-primary">{{ promotion.etudiant_set.count }} étudiants</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Spécialisation</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ promotion.specialisation }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-6 bg-info-50 dark:bg-info-900/10 border-info-100 dark:border-info-800/30">
+                <h3 class="text-sm font-bold text-info-700 dark:text-info-400 uppercase tracking-wider mb-4">Statistiques</h3>
+                <!-- Quick stats like insertion rate if you have it in views -->
+                <p class="text-sm text-gray-600 dark:text-gray-400">Cette promotion représente le dynamisme de l'IBAM.</p>
+            </div>
+        </div>
+
+        <!-- Students List -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="card overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-dark-800 bg-gray-50/50 dark:bg-dark-800/50 flex items-center justify-between">
+                    <h3 class="font-bold text-gray-900 dark:text-white">Étudiants de cette promotion</h3>
+                    <a href="{% url 'alumni:etudiant-create' %}?promotion={{ promotion.id }}" class="text-xs font-bold text-primary hover:text-primary-600 uppercase tracking-wider">
+                        <i class="fas fa-plus mr-1"></i> Ajouter un étudiant
+                    </a>
+                </div>
+                <div class="p-0">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 dark:bg-dark-800">
+                                <tr>
+                                    <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Étudiant</th>
+                                    <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Statut</th>
+                                    <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 dark:divide-dark-800">
+                                {% for etudiant in promotion.etudiant_set.all %}
+                                <tr class="hover:bg-gray-50 dark:hover:bg-dark-800/30 transition-colors group">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded bg-primary-100 dark:bg-primary-900/30 text-primary flex items-center justify-center font-bold mr-3 text-xs">
+                                                {{ etudiant.prenom|slice:":1" }}{{ etudiant.nom|slice:":1" }}
+                                            </div>
+                                            <div>
+                                                <div class="text-sm font-bold text-gray-900 dark:text-white">{{ etudiant.prenom }} {{ etudiant.nom }}</div>
+                                                <div class="text-[10px] text-gray-500">INE: {{ etudiant.ine }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="badge {% if etudiant.get_statut_actuel_display == 'Actif' %}bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400{% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400{% endif %}">
+                                            {{ etudiant.get_statut_actuel_display }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <a href="{% url 'alumni:etudiant-detail' etudiant.ine %}" class="text-gray-400 hover:text-primary transition-colors">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="px-6 py-12 text-center text-gray-500 italic">
+                                        <p>Aucun étudiant enregistré dans cette promotion.</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{% endblock %} 
+{% endblock %}

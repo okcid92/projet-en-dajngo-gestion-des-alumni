@@ -1,184 +1,218 @@
 {% extends 'alumni/base.html' %}
 {% load static %}
 
-{% block title %}Tableau de bord - Gestion des Étudiants Sortants{% endblock %}
+{% block title %}Tableau de bord - IBAM Alumni{% endblock %}
+{% block header_title %}Tableau de bord{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="display-4 mb-4">Tableau de bord</h1>
+<!-- Welcome Section -->
+<div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Bonjour, {{ user.get_full_name|default:user.username }} !</h1>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Voici un aperçu de l'activité du système aujourd'hui.</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <!-- Total Étudiants -->
+    <div class="card p-5 relative overflow-hidden group">
+        <div class="flex items-center">
+            <div class="flex-shrink-0 bg-primary-50 dark:bg-primary-900/20 p-3 rounded-lg text-primary">
+                <i class="fas fa-user-graduate text-2xl"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total Étudiants</dt>
+                    <dd class="flex items-baseline">
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ total_etudiants|default:"0" }}</div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="absolute -right-2 -bottom-2 text-primary opacity-5 transform group-hover:scale-110 transition-transform">
+            <i class="fas fa-user-graduate text-6xl"></i>
         </div>
     </div>
 
-    <!-- Statistiques -->
-    <div class="row mb-4">
-        <div class="col-md-3 mb-3">
-            <div class="card h-100 bg-primary text-white shadow-sm" data-count="{{ total_etudiants|default:"0" }}">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <h5 class="card-title text-center"><i class="fas fa-users me-2"></i>Étudiants</h5>
-                    <h2 class="display-4 text-center mb-0"></h2>
-                </div>
+    <!-- Total Entreprises -->
+    <div class="card p-5 relative overflow-hidden group">
+        <div class="flex items-center">
+            <div class="flex-shrink-0 bg-secondary-50 dark:bg-secondary-900/20 p-3 rounded-lg text-secondary">
+                <i class="fas fa-building text-2xl"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Entreprises</dt>
+                    <dd class="flex items-baseline">
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ total_entreprises|default:"0" }}</div>
+                    </dd>
+                </dl>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card h-100 bg-secondary text-white shadow-sm" data-count="{{ total_entreprises|default:"0" }}">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <h5 class="card-title text-center"><i class="fas fa-building me-2"></i>Entreprises</h5>
-                    <h2 class="display-4 text-center mb-0"></h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card h-100 bg-info text-white shadow-sm" data-count="{{ total_diplomes|default:"0" }}">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <h5 class="card-title text-center"><i class="fas fa-graduation-cap me-2"></i>Diplômes</h5>
-                    <h2 class="display-4 text-center mb-0"></h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card h-100 bg-accent text-white shadow-sm" data-count="{{ total_emplois|default:"0" }}">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <h5 class="card-title text-center"><i class="fas fa-briefcase me-2"></i>Emplois</h5>
-                    <h2 class="display-4 text-center mb-0"></h2>
-                </div>
-            </div>
+        <div class="absolute -right-2 -bottom-2 text-secondary opacity-5 transform group-hover:scale-110 transition-transform">
+            <i class="fas fa-building text-6xl"></i>
         </div>
     </div>
 
-    <!-- Actions rapides -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-light">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-bolt text-primary me-2"></i>Actions rapides
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <a href="{% url 'alumni:etudiant-create' %}" class="btn btn-primary w-100">
-                                <i class="fas fa-user-plus me-2"></i>Nouvel étudiant
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="{% url 'alumni:promotion-create' %}" class="btn btn-secondary w-100">
-                                <i class="fas fa-plus-circle me-2"></i>Nouvelle promotion
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="{% url 'alumni:entreprise-create' %}" class="btn btn-info w-100">
-                                <i class="fas fa-building me-2"></i>Nouvelle entreprise
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="{% url 'alumni:diplome-create' %}" class="btn btn-accent w-100">
-                                <i class="fas fa-graduation-cap me-2"></i>Nouveau diplôme
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <!-- Total Diplômes -->
+    <div class="card p-5 relative overflow-hidden group">
+        <div class="flex items-center">
+            <div class="flex-shrink-0 bg-info-50 dark:bg-info-900/20 p-3 rounded-lg text-info">
+                <i class="fas fa-graduation-cap text-2xl"></i>
             </div>
+            <div class="ml-5 w-0 flex-1">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Diplômes</dt>
+                    <dd class="flex items-baseline">
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ total_diplomes|default:"0" }}</div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="absolute -right-2 -bottom-2 text-info opacity-5 transform group-hover:scale-110 transition-transform">
+            <i class="fas fa-graduation-cap text-6xl"></i>
         </div>
     </div>
 
-    <div class="row">
-        <!-- Promotions récentes -->
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header bg-light">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-layer-group text-primary me-2"></i>Promotions récentes
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        {% for promotion in dernieres_promotions %}
-                        <a href="{% url 'alumni:promotion-detail' promotion.id %}" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">{{ promotion.nom }}</h6>
-                                <small class="text-muted">{{ promotion.annee }}</small>
+    <!-- Taux d'insertion -->
+    <div class="card p-5 relative overflow-hidden group">
+        <div class="flex items-center">
+            <div class="flex-shrink-0 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg text-green-600">
+                <i class="fas fa-briefcase text-2xl"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Emplois Actifs</dt>
+                    <dd class="flex items-baseline">
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ total_emplois|default:"0" }}</div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="absolute -right-2 -bottom-2 text-green-600 opacity-5 transform group-hover:scale-110 transition-transform">
+            <i class="fas fa-briefcase text-6xl"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mb-8">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Actions Rapides</h3>
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <a href="{% url 'alumni:etudiant-create' %}" class="card p-4 flex flex-col items-center justify-center text-center hover:border-primary-500 hover:text-primary transition-all group">
+            <div class="w-12 h-12 bg-gray-50 dark:bg-dark-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 transition-colors">
+                <i class="fas fa-user-plus text-gray-400 group-hover:text-primary"></i>
+            </div>
+            <span class="text-sm font-medium">Nouvel Étudiant</span>
+        </a>
+        <a href="{% url 'alumni:promotion-create' %}" class="card p-4 flex flex-col items-center justify-center text-center hover:border-secondary-500 hover:text-secondary transition-all group">
+            <div class="w-12 h-12 bg-gray-50 dark:bg-dark-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-secondary-50 dark:group-hover:bg-secondary-900/20 transition-colors">
+                <i class="fas fa-layer-group text-gray-400 group-hover:text-secondary"></i>
+            </div>
+            <span class="text-sm font-medium">Nouvelle Promotion</span>
+        </a>
+        <a href="{% url 'alumni:entreprise-create' %}" class="card p-4 flex flex-col items-center justify-center text-center hover:border-info-500 hover:text-info transition-all group">
+            <div class="w-12 h-12 bg-gray-50 dark:bg-dark-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-info-50 dark:group-hover:bg-info-900/20 transition-colors">
+                <i class="fas fa-building text-gray-400 group-hover:text-info"></i>
+            </div>
+            <span class="text-sm font-medium">Nouvelle Entreprise</span>
+        </a>
+        <a href="{% url 'alumni:statistics' %}" class="card p-4 flex flex-col items-center justify-center text-center hover:border-primary-500 hover:text-primary transition-all group">
+            <div class="w-12 h-12 bg-gray-50 dark:bg-dark-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20 transition-colors">
+                <i class="fas fa-chart-line text-gray-400 group-hover:text-primary"></i>
+            </div>
+            <span class="text-sm font-medium">Consulter Rapports</span>
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Recent Students Table -->
+    <div class="card overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-100 dark:border-dark-800 flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Derniers Étudiants</h3>
+            <a href="{% url 'alumni:etudiant-list' %}" class="text-sm font-medium text-primary hover:text-primary-600">Voir tout</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 dark:bg-dark-800">
+                    <tr>
+                        <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Étudiant</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Promotion</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-dark-800">
+                    {% for etudiant in derniers_etudiants %}
+                    <tr class="hover:bg-gray-50 dark:hover:bg-dark-800/50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-semibold mr-3">
+                                    {{ etudiant.prenom|slice:":1" }}{{ etudiant.nom|slice:":1" }}
+                                </div>
+                                <div class="text-sm">
+                                    <div class="font-medium text-gray-900 dark:text-white">{{ etudiant.prenom }} {{ etudiant.nom }}</div>
+                                    <div class="text-gray-500">INE: {{ etudiant.ine }}</div>
+                                </div>
                             </div>
-                            <p class="mb-1">{{ promotion.description|truncatechars:100 }}</p>
-                        </a>
-                        {% empty %}
-                        <p class="text-muted mb-0">Aucune promotion récente</p>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                            {{ etudiant.promotion }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="badge {% if etudiant.get_statut_actuel_display == 'Actif' %}bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400{% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400{% endif %}">
+                                {{ etudiant.get_statut_actuel_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="px-6 py-8 text-center text-gray-400 italic">Aucun étudiant récent</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+    </div>
 
-        <!-- Activités récentes (Derniers étudiants ajoutés) -->
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header bg-light">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-history text-primary me-2"></i>Derniers étudiants ajoutés
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        {% for etudiant in derniers_etudiants %}
-                        {% if etudiant.pk %}
-                        <a href="{% url 'alumni:etudiant-detail' etudiant.pk %}" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">{{ etudiant.prenom }} {{ etudiant.nom }}</h6>
-                                <small class="text-muted">{{ etudiant.date_inscription|date:"d/m/Y" }}</small>
+    <!-- Recent Promotions -->
+    <div class="card overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-100 dark:border-dark-800 flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Promotions Récentes</h3>
+            <a href="{% url 'alumni:promotion-list' %}" class="text-sm font-medium text-secondary hover:text-secondary-600">Voir tout</a>
+        </div>
+        <div class="p-6">
+            <div class="flow-root">
+                <ul class="-mb-8">
+                    {% for promotion in dernieres_promotions %}
+                    <li>
+                        <div class="relative pb-8">
+                            {% if not forloop.last %}
+                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-dark-800" aria-hidden="true"></span>
+                            {% endif %}
+                            <div class="relative flex space-x-3">
+                                <div>
+                                    <span class="h-8 w-8 rounded-full bg-secondary-100 dark:bg-secondary-900/20 flex items-center justify-center text-secondary">
+                                        <i class="fas fa-graduation-cap text-xs"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1 min-w-0 flex justify-between space-x-4">
+                                    <div>
+                                        <p class="text-sm text-gray-900 dark:text-white font-medium">{{ promotion.nom }}</p>
+                                        <p class="text-xs text-gray-500">{{ promotion.annee }} • {{ promotion.description|truncatechars:60 }}</p>
+                                    </div>
+                                    <div class="text-right text-xs whitespace-nowrap text-gray-400">
+                                        <a href="{% url 'alumni:promotion-detail' promotion.id %}" class="hover:text-secondary">Détails <i class="fas fa-chevron-right ml-1"></i></a>
+                                    </div>
+                                </div>
                             </div>
-                            <p class="mb-1">INE: {{ etudiant.ine }}</p>
-                        </a>
-                        {% else %}
-                        <div class="list-group-item text-muted">Données étudiant invalides ou manquantes.</div>
-                        {% endif %}
-                        {% empty %}
-                        <p class="text-muted mb-0">Aucun étudiant récent</p>
-                        {% endfor %}
-                    </div>
-                </div>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li class="text-center text-gray-400 py-4">Aucune promotion récente</li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_css %}
-<style>
-    /* Custom styles for card hover and list items */
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;
-    }
-
-    .list-group-item {
-        transition: background-color 0.3s ease;
-    }
-
-    .list-group-item:hover {
-        background-color: var(--light);
-    }
-    
-    /* Styles for card body content alignment */
-    .card-body h5, .card-body h2 {
-        margin-bottom: 0.5rem;
-    }
-    .card-body h2 {
-        font-size: 2.5rem;
-    }
-
-    /* Ensure icons within buttons have margin */
-    .btn .fas {
-        margin-right: 0.5rem;
-    }
-</style>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'alumni/js/dashboard_animations.js' %}"></script>
 {% endblock %}

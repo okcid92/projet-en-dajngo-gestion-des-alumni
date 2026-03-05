@@ -1,105 +1,98 @@
 {% extends 'alumni/base.html' %}
 
-{% block title %}Statistiques{% endblock %}
+{% block title %}Statistiques - IBAM Alumni{% endblock %}
+{% block header_title %}Analyses & Statistiques{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Statistiques de l'IBAM</h1>
+<div class="space-y-8">
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Tableau de Bord Statistique</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Visualisez les données d'insertion et la répartition des alumni.</p>
+        </div>
+        <button onclick="window.print()" class="btn-outline">
+            <i class="fas fa-print mr-2"></i>Exporter Rapport
+        </button>
+    </div>
 
-    <div class="chart-row">
+    <!-- Charts Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Distribution des statuts -->
-        <div class="chart-column">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Distribution des statuts</h5>
-                </div>
-                <div class="card-content">
-                    <canvas id="statutsChart"></canvas>
-                </div>
+        <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fas fa-pie-chart text-primary"></i>
+                    Distribution des statuts
+                </h3>
+            </div>
+            <div class="relative h-64">
+                <canvas id="statutsChart"></canvas>
             </div>
         </div>
 
         <!-- Distribution par promotion -->
-        <div class="chart-column">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Distribution par promotion</h5>
-                </div>
-                <div class="card-content">
-                    <canvas id="promotionsChart"></canvas>
-                </div>
+        <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fas fa-bar-chart text-secondary"></i>
+                    Alumni par promotion
+                </h3>
+            </div>
+            <div class="relative h-64">
+                <canvas id="promotionsChart"></canvas>
             </div>
         </div>
 
         <!-- Top 5 des spécialisations -->
-        <div class="chart-column">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Top 5 des spécialisations</h5>
-                </div>
-                <div class="card-content">
-                    <canvas id="specialisationsChart"></canvas>
-                </div>
+        <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fas fa-certificate text-info"></i>
+                    Top Spécialisations
+                </h3>
+            </div>
+            <div class="relative h-64">
+                <canvas id="specialisationsChart"></canvas>
             </div>
         </div>
 
         <!-- Top 5 des entreprises -->
-        <div class="chart-column">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Top 5 des entreprises</h5>
-                </div>
-                <div class="card-content">
-                    <canvas id="entreprisesChart"></canvas>
-                </div>
+        <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fas fa-building text-primary"></i>
+                    Principaux employeurs
+                </h3>
+            </div>
+            <div class="relative h-64">
+                <canvas id="entreprisesChart"></canvas>
             </div>
         </div>
 
         <!-- Taux d'insertion -->
-        <div class="chart-column">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Taux d'insertion</h5>
-                </div>
-                <div class="card-content">
-                    <canvas id="insertionChart"></canvas>
-                </div>
+        <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fas fa-line-chart text-green-500"></i>
+                    Évolution du taux d'insertion (%)
+                </h3>
+            </div>
+            <div class="relative h-64">
+                <canvas id="insertionChart"></canvas>
             </div>
         </div>
 
         <!-- Distribution des types de contrats -->
-        <div class="chart-column">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Distribution des types de contrats</h5>
-                </div>
-                <div class="card-content">
-                    <canvas id="contratsChart"></canvas>
-                </div>
+        <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fas fa-file-contract text-secondary"></i>
+                    Types de contrats
+                </h3>
             </div>
-        </div>
-
-        <!-- Évolution des diplômes -->
-        <div class="chart-column">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Évolution des diplômes</h5>
-                </div>
-                <div class="card-content">
-                    <canvas id="evolutionChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Secteurs d'activité -->
-        <div class="chart-column">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Secteurs d'activité</h5>
-                </div>
-                <div class="card-content">
-                    <canvas id="secteursChart"></canvas>
-                </div>
+            <div class="relative h-64">
+                <canvas id="contratsChart"></canvas>
             </div>
         </div>
     </div>
@@ -110,15 +103,43 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Shared Chart Config
+    const isDark = document.documentElement.classList.contains('dark');
+    const textColor = isDark ? '#94a3b8' : '#64748b';
+    const gridColor = isDark ? '#1e293b' : '#f1f5f9';
+
+    Chart.defaults.color = textColor;
+    Chart.defaults.font.family = "'Inter', sans-serif";
+
+    // Chart Colors
+    const colors = [
+        '#ea663b', // primary
+        '#f0906e', // secondary
+        '#42b5da', // info
+        '#10b981', // success/green
+        '#f59e0b', // warning/amber
+        '#6366f1'  // indigo
+    ];
+
     // Distribution des statuts
     new Chart(document.getElementById('statutsChart'), {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: {{ statuts_labels|default:'[]'|safe }},
             datasets: [{
                 data: {{ statuts_data|default:'[]'|safe }},
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                backgroundColor: colors,
+                borderWidth: 0,
+                hoverOffset: 15
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+            },
+            cutout: '70%'
         }
     });
 
@@ -128,29 +149,41 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: {{ promotions_labels|default:'[]'|safe }},
             datasets: [{
-                label: "Nombre d'étudiants",
+                label: "Effectif",
                 data: {{ promotions_data|default:'[]'|safe }},
-                backgroundColor: '#36A2EB'
+                backgroundColor: colors[1],
+                borderRadius: 6
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+                y: { grid: { color: gridColor }, beginAtZero: true },
+                x: { grid: { display: false } }
+            },
+            plugins: { legend: { display: false } }
         }
     });
 
     // Top 5 des spécialisations
     new Chart(document.getElementById('specialisationsChart'), {
-        type: 'doughnut',
+        type: 'pie',
         data: {
             labels: {{ specialisations_labels|default:'[]'|safe }},
             datasets: [{
                 data: {{ specialisations_data|default:'[]'|safe }},
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                backgroundColor: colors,
+                borderWidth: 2,
+                borderColor: isDark ? '#111827' : '#fff'
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 8 } }
+            }
         }
     });
 
@@ -160,17 +193,21 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: {{ entreprises_labels|default:'[]'|safe }},
             datasets: [{
-                label: "Nombre d'emplois",
+                label: "Emplois",
                 data: {{ entreprises_data|default:'[]'|safe }},
-                backgroundColor: '#FFCE56'
+                backgroundColor: colors[0],
+                borderRadius: 6
             }]
         },
         options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+                x: { grid: { color: gridColor }, beginAtZero: true },
+                y: { grid: { display: false } }
+            },
+            plugins: { legend: { display: false } }
         }
     });
 
@@ -180,74 +217,49 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: {{ insertion_labels|default:'[]'|safe }},
             datasets: [{
-                label: "Taux d'insertion (%)",
+                label: "Taux %",
                 data: {{ insertion_data|default:'[]'|safe }},
-                borderColor: '#4BC0C0',
-                fill: false
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4,
+                pointBackgroundColor: '#10b981'
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100
-                }
-            }
+                y: { grid: { color: gridColor }, beginAtZero: true, max: 100 },
+                x: { grid: { display: false } }
+            },
+            plugins: { legend: { display: false } }
         }
     });
 
     // Distribution des types de contrats
     new Chart(document.getElementById('contratsChart'), {
-        type: 'pie',
+        type: 'polarArea',
         data: {
             labels: {{ contrats_labels|default:'[]'|safe }},
             datasets: [{
                 data: {{ contrats_data|default:'[]'|safe }},
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
-            }]
-        }
-    });
-
-    // Évolution des diplômes
-    new Chart(document.getElementById('evolutionChart'), {
-        type: 'line',
-        data: {
-            labels: {{ evolution_labels|default:'[]'|safe }},
-            datasets: [{
-                label: "Nombre de diplômes",
-                data: {{ evolution_data|default:'[]'|safe }},
-                borderColor: '#9966FF',
-                fill: false
+                backgroundColor: colors.map(c => c + 'CC'), // with opacity
+                borderWidth: 0
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    // Secteurs d'activité
-    new Chart(document.getElementById('secteursChart'), {
-        type: 'bar',
-        data: {
-            labels: {{ secteurs_labels|default:'[]'|safe }},
-            datasets: [{
-                label: "Nombre d'entreprises",
-                data: {{ secteurs_data|default:'[]'|safe }},
-                backgroundColor: ['#FF6384']
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+                r: { grid: { color: gridColor }, ticks: { display: false } }
+            },
+            plugins: {
+                legend: { position: 'bottom', labels: { usePointStyle: true } }
             }
         }
     });
 });
 </script>
-{% endblock %} 
+{% endblock %}

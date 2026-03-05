@@ -1,0 +1,28 @@
+{
+  "name": "projet-en-dajngo-gestion-des-alumni",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tailwindcss -i ./alumni/static/alumni/css/input.css -o ./alumni/static/alumni/css/output.css",
+    "dev": "tailwindcss -i ./alumni/static/alumni/css/input.css -o ./alumni/static/alumni/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okcid92/projet-en-dajngo-gestion-des-alumni.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/okcid92/projet-en-dajngo-gestion-des-alumni/issues"
+  },
+  "homepage": "https://github.com/okcid92/projet-en-dajngo-gestion-des-alumni#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.2.1"
+  }
+}

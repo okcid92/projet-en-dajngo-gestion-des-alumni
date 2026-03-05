@@ -3,20 +3,30 @@
 {% block title %}Supprimer {{ object.nom }} {{ object.prenom }}{% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header">
-        <h2>Confirmer la suppression</h2>
-    </div>
-    <div class="card-body">
-        <p class="alert alert-danger">
-            Êtes-vous sûr de vouloir supprimer l'étudiant "{{ object.nom }} {{ object.prenom }}" ?
-            Cette action est irréversible.
-        </p>
+<div class="max-w-2xl mx-auto px-4 py-8">
+    <div class="card p-8 border-l-4 border-red-600">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+            <i class="fas fa-exclamation-triangle text-red-600"></i>
+            Confirmer la suppression
+        </h2>
+        
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p class="text-red-800 font-medium">
+                Êtes-vous sûr de vouloir supprimer <strong>{{ object.nom }} {{ object.prenom }}</strong> ?
+            </p>
+            <p class="text-red-700 text-sm mt-2">
+                <i class="fas fa-info-circle mr-2"></i>Cette action est irréversible.
+            </p>
+        </div>
 
-        <form method="post">
+        <form method="post" class="flex gap-4 justify-center">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
-            <a href="{% url 'alumni:etudiant-detail' object.ine %}" class="btn btn-secondary">Annuler</a>
+            <button type="submit" class="px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium flex items-center gap-2">
+                <i class="fas fa-trash mr-2"></i>Confirmer la suppression
+            </button>
+            <a href="{% url 'alumni:etudiant-detail' object.ine %}" class="px-6 py-3 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition-colors font-medium flex items-center gap-2">
+                <i class="fas fa-times mr-2"></i>Annuler
+            </a>
         </form>
     </div>
 </div>

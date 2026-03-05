@@ -3,81 +3,89 @@
 {% block title %}Liste des Diplômes{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="header-with-actions">
-        <h1>Liste des Diplômes</h1>
-        <a href="{% url 'alumni:diplome-create' %}" class="btn btn-primary btn-sm">
-            Nouveau Diplôme
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-800">Diplômes</h1>
+            <p class="text-gray-500 mt-2">Gérer les diplômes des étudiants</p>
+        </div>
+        <a href="{% url 'alumni:diplome-create' %}" class="btn-primary">
+            <i class="fas fa-plus mr-2"></i>Nouveau Diplôme
         </a>
     </div>
 
     <!-- Filtres -->
-    <div class="card">
-        <div class="card-content">
-            <form method="get" class="form-grid">
-                <div class="form-group">
-                    <label for="specialisation" class="form-label">Spécialisation</label>
-                    <input type="text" class="form-control" id="specialisation" name="specialisation" value="{{ request.GET.specialisation }}">
-                </div>
-                <div class="form-group">
-                    <label for="universite" class="form-label">Université</label>
-                    <input type="text" class="form-control" id="universite" name="universite" value="{{ request.GET.universite }}">
-                </div>
-                <div class="form-group">
-                    <label for="annee" class="form-label">Année</label>
-                    <input type="number" class="form-control" id="annee" name="annee" value="{{ request.GET.annee }}">
-                </div>
-                <div class="form-group form-actions-filter">
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        Filtrer
-                    </button>
-                    <a href="{% url 'alumni:diplome-list' %}" class="btn btn-secondary btn-sm">
-                        Réinitialiser
-                    </a>
-                </div>
-            </form>
-        </div>
+    <div class="card p-6 mb-8">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Filtres</h3>
+        <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label for="specialisation" class="form-label">Spécialisation</label>
+                <input type="text" class="form-control" id="specialisation" name="specialisation" placeholder="Rechercher..." value="{{ request.GET.specialisation }}">
+            </div>
+            <div>
+                <label for="universite" class="form-label">Université</label>
+                <input type="text" class="form-control" id="universite" name="universite" placeholder="Rechercher..." value="{{ request.GET.universite }}">
+            </div>
+            <div>
+                <label for="annee" class="form-label">Année</label>
+                <input type="number" class="form-control" id="annee" name="annee" placeholder="AAAA" value="{{ request.GET.annee }}">
+            </div>
+            <div class="flex gap-2 items-end">
+                <button type="submit" class="btn-primary flex-1">
+                    <i class="fas fa-search mr-2"></i>Filtrer
+                </button>
+                <a href="{% url 'alumni:diplome-list' %}" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition-colors inline-flex items-center gap-2 justify-center">
+                    <i class="fas fa-redo"></i>Réinitialiser
+                </a>
+            </div>
+        </form>
     </div>
 
-    <div class="table-container">
-        <table class="data-table striped-table">
+    <!-- Table -->
+    <div class="card overflow-x-auto">
+        <table class="w-full">
             <thead>
-                <tr>
-                    <th>Intitulé</th>
-                    <th>Spécialisation</th>
-                    <th>Université</th>
-                    <th>Année</th>
-                    <th>Étudiant</th>
-                    <th>Actions</th>
+                <tr class="bg-gray-50 border-b border-gray-200">
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Intitulé</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Spécialisation</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Université</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Année</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Étudiant</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for diplome in diplomes %}
-                <tr>
-                    <td>{{ diplome.intitule }}</td>
-                    <td>{{ diplome.specialisation }}</td>
-                    <td>{{ diplome.universite }}</td>
-                    <td>{{ diplome.annee_obtention }}</td>
-                    <td>
-                        <a href="{% url 'alumni:etudiant-detail' diplome.etudiant.ine %}">
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 text-sm text-gray-900">{{ diplome.intitule }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ diplome.specialisation }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ diplome.universite }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ diplome.annee_obtention }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">
+                        <a href="{% url 'alumni:etudiant-detail' diplome.etudiant.ine %}" class="text-blue-600 hover:text-blue-800 font-medium">
                             {{ diplome.etudiant.nom }} {{ diplome.etudiant.prenom }}
                         </a>
                     </td>
-                    <td>
-                        <a href="{% url 'alumni:diplome-detail' diplome.pk %}" class="btn btn-info btn-sm">
-                            Détails
-                        </a>
-                        <a href="{% url 'alumni:diplome-update' diplome.pk %}" class="btn btn-warning btn-sm">
-                            Modifier
-                        </a>
-                        <a href="{% url 'alumni:diplome-delete' diplome.pk %}" class="btn btn-danger btn-sm">
-                            Supprimer
-                        </a>
+                    <td class="px-6 py-4 text-sm">
+                        <div class="flex gap-2">
+                            <a href="{% url 'alumni:diplome-detail' diplome.pk %}" class="text-blue-600 hover:text-blue-800 font-medium" title="Voir">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'alumni:diplome-update' diplome.pk %}" class="text-orange-500 hover:text-orange-700 font-medium" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'alumni:diplome-delete' diplome.pk %}" class="text-red-600 hover:text-red-800 font-medium" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center">Aucun diplôme trouvé</td>
+                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        <i class="fas fa-inbox text-4xl mb-4 block opacity-50"></i>
+                        Aucun diplôme trouvé
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

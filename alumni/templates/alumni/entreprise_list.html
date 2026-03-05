@@ -1,51 +1,99 @@
 {% extends 'alumni/base.html' %}
 
-{% block title %}Liste des Entreprises{% endblock %}
+{% block title %}Entreprises - IBAM Alumni{% endblock %}
+{% block header_title %}Gestion des Entreprises{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="header-with-actions">
-        <h2>Liste des Entreprises</h2>
-        <a href="{% url 'alumni:entreprise-create' %}" class="btn btn-primary btn-sm">
-            Nouvelle Entreprise
+<div class="flex flex-col gap-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Annuaire des Entreprises</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Gérez les partenaires et les employeurs de nos alumni.</p>
+        </div>
+        <a href="{% url 'alumni:entreprise-create' %}" class="btn-primary">
+            <i class="fas fa-plus mr-2"></i>Nouvelle Entreprise
         </a>
     </div>
 
-    {% if entreprises %}
-    <div class="card-grid">
-        {% for entreprise in entreprises %}
-        <div class="card">
-            <div class="card-content">
-                <h5 class="card-title">{{ entreprise.nom }}</h5>
-                <p class="card-text">
-                    <strong>Secteur :</strong> {{ entreprise.secteur }}<br>
-                    <strong>Email :</strong> {{ entreprise.email_contact }}<br>
-                    {% if entreprise.site_web %}
-                    <strong>Site web :</strong> 
-                    <a href="{{ entreprise.site_web }}" target="_blank">{{ entreprise.site_web }}</a>
-                    {% endif %}
-                </p>
+    <!-- Search/Filter Bar -->
+    <div class="card p-4">
+        <form method="get" class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1 relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" name="search" placeholder="Rechercher une entreprise ou un secteur..." 
+                       class="form-input pl-10" value="{{ request.GET.search }}">
             </div>
-            <div class="card-footer">
-                <div class="btn-group">
-                    <a href="{% url 'alumni:entreprise-detail' entreprise.pk %}" class="btn btn-info btn-sm">
-                        Voir
+            <button type="submit" class="btn-info px-8">Rechercher</button>
+        </form>
+    </div>
+
+    <!-- Entreprises Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for entreprise in entreprises %}
+        <div class="card overflow-hidden group hover:border-secondary-500/50 transition-all duration-300">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-secondary-50 dark:bg-secondary-900/20 text-secondary flex items-center justify-center text-xl group-hover:bg-secondary group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    {% if entreprise.site_web %}
+                    <a href="{{ entreprise.site_web }}" target="_blank" class="text-gray-400 hover:text-primary transition-colors">
+                        <i class="fas fa-external-link-alt text-sm"></i>
                     </a>
-                    <a href="{% url 'alumni:entreprise-update' entreprise.pk %}" class="btn btn-primary btn-sm">
-                        Modifier
-                    </a>
-                    <a href="{% url 'alumni:entreprise-delete' entreprise.pk %}" class="btn btn-danger btn-sm">
-                        Supprimer
-                    </a>
+                    {% endif %}
+                </div>
+                
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-secondary transition-colors">
+                    {{ entreprise.nom }}
+                </h3>
+                <p class="text-xs font-semibold text-secondary-600 dark:text-secondary-400 uppercase tracking-wider mb-4">
+                    {{ entreprise.secteur }}
+                </p>
+
+                <div class="space-y-2 mb-6">
+                    <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-envelope w-4"></i>
+                        <span class="truncate">{{ entreprise.email_contact|default:"Pas d'email" }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-map-marker-alt w-4"></i>
+                        <span class="truncate">{{ entreprise.adresse|default:"Adresse non renseignée" }}</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-dark-800">
+                    <span class="text-xs font-medium text-gray-400 italic">
+                        {{ entreprise.emploi_set.count }} alumni employé{{ entreprise.emploi_set.count|pluralize }}
+                    </span>
+                    <div class="flex gap-1">
+                        <a href="{% url 'alumni:entreprise-detail' entreprise.pk %}" class="p-2 text-info hover:bg-info-50 dark:hover:bg-info-900/20 rounded-lg transition-colors" title="Voir détails">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{% url 'alumni:entreprise-update' entreprise.pk %}" class="p-2 text-secondary hover:bg-secondary-50 dark:hover:bg-secondary-900/20 rounded-lg transition-colors" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'alumni:entreprise-delete' entreprise.pk %}" class="p-2 text-accent hover:bg-accent/10 rounded-lg transition-colors" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
+        {% empty %}
+        <div class="col-span-full card p-12 text-center">
+            <div class="w-20 h-20 bg-gray-50 dark:bg-dark-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-city text-3xl text-gray-300"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Aucune entreprise</h3>
+            <p class="text-gray-500 mt-1 mb-6">Ajoutez les entreprises qui emploient nos étudiants sortants.</p>
+            <a href="{% url 'alumni:entreprise-create' %}" class="btn-primary">
+                <i class="fas fa-plus mr-2"></i>Ajouter une entreprise
+            </a>
+        </div>
         {% endfor %}
     </div>
-    {% else %}
-    <div class="alert info-alert">
-        Aucune entreprise n'a été créée pour le moment.
-    </div>
-    {% endif %}
 </div>
-{% endblock %} 
+{% endblock %}

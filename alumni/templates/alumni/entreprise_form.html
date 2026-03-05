@@ -1,83 +1,85 @@
 {% extends 'alumni/base.html' %}
 
 {% block title %}
-    {% if form.instance.pk %}
-        Modifier {{ form.instance.nom }}
-    {% else %}
-        Nouvelle Entreprise
-    {% endif %}
+    {% if form.instance.pk %}Modifier {{ form.instance.nom }}{% else %}Nouvelle Entreprise{% endif %} - IBAM Alumni
+{% endblock %}
+
+{% block header_title %}
+    {% if form.instance.pk %}Modifier l'entreprise{% else %}Ajouter une entreprise{% endif %}
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            <h2>
-                {% if form.instance.pk %}
-                    Modifier {{ form.instance.nom }}
-                {% else %}
-                    Nouvelle Entreprise
-                {% endif %}
-            </h2>
-        </div>
-        <div class="card-content">
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="{{ form.nom.id_for_label }}" class="form-label">Nom</label>
-                    {{ form.nom }}
-                    {% if form.nom.errors %}
-                    <div class="error-message">
-                        {{ form.nom.errors }}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.secteur.id_for_label }}" class="form-label">Secteur</label>
-                    {{ form.secteur }}
-                    {% if form.secteur.errors %}
-                    <div class="error-message">
-                        {{ form.secteur.errors }}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.adresse.id_for_label }}" class="form-label">Adresse</label>
-                    {{ form.adresse }}
-                    {% if form.adresse.errors %}
-                    <div class="error-message">
-                        {{ form.adresse.errors }}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.site_web.id_for_label }}" class="form-label">Site web</label>
-                    {{ form.site_web }}
-                    {% if form.site_web.errors %}
-                    <div class="error-message">
-                        {{ form.site_web.errors }}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.email_contact.id_for_label }}" class="form-label">Email de contact</label>
-                    {{ form.email_contact }}
-                    {% if form.email_contact.errors %}
-                    <div class="error-message">
-                        {{ form.email_contact.errors }}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        Enregistrer
-                    </button>
-                    <a href="{% url 'alumni:entreprise-list' %}" class="btn btn-secondary btn-sm">
-                        Annuler
-                    </a>
-                </div>
-            </form>
-        </div>
+<div class="max-w-4xl mx-auto">
+    <div class="mb-6">
+        <a href="{% url 'alumni:entreprise-list' %}" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-secondary transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>Retour à l'annuaire
+        </a>
     </div>
+
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+        
+        <div class="card p-6 sm:p-8">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100 dark:border-dark-800">
+                <div class="w-10 h-10 rounded-full bg-secondary-50 dark:bg-secondary-900/20 text-secondary flex items-center justify-center">
+                    <i class="fas fa-building text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Informations Entreprise</h2>
+                    <p class="text-sm text-gray-500">Détails de l'organisation partenaire.</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="{{ form.nom.id_for_label }}" class="form-label font-semibold">Nom de l'entreprise <span class="text-accent">*</span></label>
+                    {{ form.nom }}
+                    {% if form.nom.errors %}<p class="text-red-500 text-xs mt-1">{{ form.nom.errors|join:", " }}</p>{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.secteur.id_for_label }}" class="form-label font-semibold">Secteur d'activité <span class="text-accent">*</span></label>
+                    {{ form.secteur }}
+                    {% if form.secteur.errors %}<p class="text-red-500 text-xs mt-1">{{ form.secteur.errors|join:", " }}</p>{% endif %}
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label for="{{ form.adresse.id_for_label }}" class="form-label font-semibold">Adresse</label>
+                {{ form.adresse }}
+                {% if form.adresse.errors %}<p class="text-red-500 text-xs mt-1">{{ form.adresse.errors|join:", " }}</p>{% endif %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.email_contact.id_for_label }}" class="form-label font-semibold">Email de contact</label>
+                    {{ form.email_contact }}
+                    {% if form.email_contact.errors %}<p class="text-red-500 text-xs mt-1">{{ form.email_contact.errors|join:", " }}</p>{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.site_web.id_for_label }}" class="form-label font-semibold">Site Web</label>
+                    {{ form.site_web }}
+                    {% if form.site_web.errors %}<p class="text-red-500 text-xs mt-1">{{ form.site_web.errors|join:", " }}</p>{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-4 pt-4">
+            <a href="{% url 'alumni:entreprise-list' %}" class="btn-outline px-6">
+                Annuler
+            </a>
+            <button type="submit" class="btn-primary px-8 shadow-lg shadow-primary-200 dark:shadow-none bg-secondary hover:bg-secondary-600 focus:ring-secondary">
+                <i class="fas fa-save mr-2"></i>
+                {% if form.instance.pk %}Mettre à jour{% else %}Ajouter l'entreprise{% endif %}
+            </button>
+        </div>
+    </form>
 </div>
-{% endblock %} 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea').forEach(element => {
+            element.classList.add('form-input');
+        });
+    });
+</script>
+{% endblock %}
